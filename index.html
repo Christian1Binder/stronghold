@@ -8,20 +8,138 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #333;
+            background-color: #222;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            overflow: auto;
         }
+
+        #game-wrapper {
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
         #game-container {
-            border: 2px solid #555;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            border: 4px solid #4a3b2b;
         }
+
+        /* Top Resource Bar */
+        #resource-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(30, 20, 10, 0.85);
+            border-bottom: 2px solid #5a4b3b;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .resource {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .res-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .res-wood { background-color: #8b5a2b; }
+        .res-stone { background-color: #888888; }
+        .res-iron { background-color: #4a5d6a; }
+        .res-food { background-color: #f0e68c; }
+
+        .res-pop { background-color: #3b5998; }
+        .res-moral { background-color: #228b22; }
+
+        /* Bottom Build Menu */
+        #build-menu {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(30, 20, 10, 0.9);
+            border-top: 2px solid #5a4b3b;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .build-btn {
+            background-color: #4a3b2b;
+            border: 2px solid #6b5b4b;
+            color: white;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .build-btn:hover {
+            background-color: #6b5b4b;
+        }
+
+        .build-btn.active {
+            background-color: #8b7b6b;
+            border-color: #e6cc80;
+        }
+
     </style>
 </head>
 <body>
-    <div id="game-container"></div>
+    <div id="game-wrapper">
+        <div id="resource-bar">
+            <div style="display: flex; gap: 20px;">
+                <div class="resource"><span class="res-icon res-wood"></span> Holz: <span id="res-wood-val">500</span></div>
+                <div class="resource"><span class="res-icon res-stone"></span> Stein: <span id="res-stone-val">200</span></div>
+                <div class="resource"><span class="res-icon res-iron"></span> Eisen: <span id="res-iron-val">50</span></div>
+                <div class="resource"><span class="res-icon res-food"></span> Nahrung: <span id="res-food-val">300</span></div>
+            </div>
+            <div style="display: flex; gap: 20px;">
+                <div class="resource"><span class="res-icon res-pop"></span> Bürger: <span>12/12</span></div>
+                <div class="resource"><span class="res-icon res-moral"></span> Moral: <span>100</span></div>
+            </div>
+        </div>
+
+        <div id="game-container"></div>
+
+        <div id="build-menu">
+            <button class="build-btn active" id="btn-wall" onclick="window.selectBuildMode('wall')">Mauer bauen (Stein)</button>
+            <button class="build-btn" id="btn-tower" onclick="window.selectBuildMode('tower')">Turm (Stein)</button>
+            <button class="build-btn" id="btn-house" onclick="window.selectBuildMode('house')">Haus (Holz)</button>
+            <button class="build-btn" id="btn-unit" onclick="window.selectBuildMode('unit')">Einheit kommandieren</button>
+        </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
+    <script>
+        // Simple bridge for UI to communicate with Phaser
+        window.currentBuildMode = 'wall';
+
+        window.selectBuildMode = function(mode) {
+            window.currentBuildMode = mode;
+            document.querySelectorAll('.build-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + mode).classList.add('active');
+        }
+    </script>
 </body>
 </html>
