@@ -1,0 +1,3 @@
+[submodule "RTSNavigationLib"]
+	path = RTSNavigationLib
+	url = https://github.com/Liech/RTSNavigationLib.git
