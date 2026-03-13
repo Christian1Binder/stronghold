@@ -21,8 +21,10 @@
         #game-wrapper {
             position: relative;
             margin-top: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 200px;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: row;
         }
 
         #game-container {
@@ -68,30 +70,43 @@
         .res-pop { background-color: #3b5998; }
         .res-moral { background-color: #228b22; }
 
-        /* Bottom Build Menu */
-        #build-menu {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(30, 20, 10, 0.9);
-            border-top: 2px solid #5a4b3b;
+        /* Right Side Build Menu Container */
+        #build-panel {
+            width: 250px;
+            background-color: #3a2b1b;
+            border: 4px solid #4a3b2b;
+            border-left: none;
             padding: 10px;
+            overflow-y: auto;
+            max-height: 64 * 15px; /* Match game height roughly */
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            z-index: 10;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .category-title {
+            background-color: #2a1b0b;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #5a4b3b;
+            margin-top: 10px;
         }
 
         .build-btn {
             background-color: #4a3b2b;
             border: 2px solid #6b5b4b;
             color: white;
-            padding: 8px 15px;
+            padding: 8px 10px;
             cursor: pointer;
             border-radius: 4px;
             font-weight: bold;
             transition: background 0.2s;
+            text-align: left;
+            font-size: 12px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
         }
 
         .build-btn:hover {
@@ -103,42 +118,110 @@
             border-color: #e6cc80;
         }
 
+        .cost-badge {
+            font-size: 10px;
+            color: #ddd;
+        }
+
     </style>
 </head>
 <body>
     <div id="game-wrapper">
-        <div id="resource-bar">
-            <div style="display: flex; gap: 20px;">
-                <div class="resource"><span class="res-icon res-wood"></span> Holz: <span id="res-wood-val">500</span></div>
-                <div class="resource"><span class="res-icon res-stone"></span> Stein: <span id="res-stone-val">200</span></div>
-                <div class="resource"><span class="res-icon res-iron"></span> Eisen: <span id="res-iron-val">50</span></div>
-                <div class="resource"><span class="res-icon res-food"></span> Nahrung: <span id="res-food-val">300</span></div>
-            </div>
-            <div style="display: flex; gap: 20px;">
-                <div class="resource"><span class="res-icon res-pop"></span> Bürger: <span>12/12</span></div>
-                <div class="resource"><span class="res-icon res-moral"></span> Moral: <span>100</span></div>
+        <div id="game-container">
+            <div id="resource-bar">
+                <div style="display: flex; gap: 20px;">
+                    <div class="resource"><span class="res-icon res-wood"></span> Holz: <span id="res-wood-val">500</span></div>
+                    <div class="resource"><span class="res-icon res-stone"></span> Stein: <span id="res-stone-val">200</span></div>
+                    <div class="resource"><span class="res-icon res-iron"></span> Eisen: <span id="res-iron-val">50</span></div>
+                    <div class="resource"><span class="res-icon res-food"></span> Nahrung: <span id="res-food-val">300</span></div>
+                </div>
+                <div style="display: flex; gap: 20px;">
+                    <div class="resource"><span class="res-icon res-pop"></span> Bürger: <span>12/12</span></div>
+                    <div class="resource"><span class="res-icon res-moral"></span> Moral: <span id="res-moral-val">100</span></div>
+                </div>
             </div>
         </div>
 
-        <div id="game-container"></div>
+        <div id="build-panel">
+            <button class="build-btn active" id="btn-unit" onclick="window.selectBuildMode('unit')">Einheit kommandieren</button>
+            <button class="build-btn" id="btn-wall" onclick="window.selectBuildMode('wall')">Mauer bauen <span class="cost-badge">10 Stein</span></button>
+            <button class="build-btn" id="btn-tower" onclick="window.selectBuildMode('tower')">Turm <span class="cost-badge">40 Stein</span></button>
 
-        <div id="build-menu">
-            <button class="build-btn active" id="btn-wall" onclick="window.selectBuildMode('wall')">Mauer bauen (Stein)</button>
-            <button class="build-btn" id="btn-tower" onclick="window.selectBuildMode('tower')">Turm (Stein)</button>
-            <button class="build-btn" id="btn-house" onclick="window.selectBuildMode('house')">Haus (Holz)</button>
-            <button class="build-btn" id="btn-unit" onclick="window.selectBuildMode('unit')">Einheit kommandieren</button>
+            <div class="category-title">Werkstätten</div>
+            <button class="build-btn" id="btn-Vorratslager" onclick="window.selectBuildMode('Vorratslager')">Vorratslager <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Holzfällerhütte" onclick="window.selectBuildMode('Holzfällerhütte')">Holzfällerhütte <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Steinbruch" onclick="window.selectBuildMode('Steinbruch')">Steinbruch <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Ochsenjoch" onclick="window.selectBuildMode('Ochsenjoch')">Ochsenjoch <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Eisenmine" onclick="window.selectBuildMode('Eisenmine')">Eisenmine <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Pechgrube" onclick="window.selectBuildMode('Pechgrube')">Pechgrube <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Marktplatz" onclick="window.selectBuildMode('Marktplatz')">Marktplatz <span class="cost-badge">25 Holz</span></button>
+
+            <div class="category-title">Farmen</div>
+            <button class="build-btn" id="btn-Jägerstand" onclick="window.selectBuildMode('Jägerstand')">Jägerstand <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Obstgarten" onclick="window.selectBuildMode('Obstgarten')">Obstgarten <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Käserei" onclick="window.selectBuildMode('Käserei')">Käserei <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Getreidefarm" onclick="window.selectBuildMode('Getreidefarm')">Getreidefarm <span class="cost-badge">15 Holz</span></button>
+            <button class="build-btn" id="btn-Hopfenfarm" onclick="window.selectBuildMode('Hopfenfarm')">Hopfenfarm <span class="cost-badge">15 Holz</span></button>
+
+            <div class="category-title">Stadtgebäude</div>
+            <button class="build-btn" id="btn-Hütte" onclick="window.selectBuildMode('Hütte')">Hütte <span class="cost-badge">6 Holz</span></button>
+            <button class="build-btn" id="btn-Kapelle" onclick="window.selectBuildMode('Kapelle')">Kapelle <span class="cost-badge">10 Stein</span></button>
+            <button class="build-btn" id="btn-Kirche" onclick="window.selectBuildMode('Kirche')">Kirche <span class="cost-badge">50 Stein</span></button>
+            <button class="build-btn" id="btn-Kathedrale" onclick="window.selectBuildMode('Kathedrale')">Kathedrale <span class="cost-badge">100 Stein</span></button>
+            <button class="build-btn" id="btn-Apotheke" onclick="window.selectBuildMode('Apotheke')">Apotheke <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Brunnen" onclick="window.selectBuildMode('Brunnen')">Brunnen <span class="cost-badge">20 Stein</span></button>
+            <button class="build-btn" id="btn-Wassertrog" onclick="window.selectBuildMode('Wassertrog')">Wassertrog <span class="cost-badge">5 Holz</span></button>
+
+            <div class="category-title">Strafen & Schrecken</div>
+            <button class="build-btn" id="btn-Galgen" onclick="window.selectBuildMode('Galgen')">Galgen <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Senkgrube" onclick="window.selectBuildMode('Senkgrube')">Senkgrube <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Pranger" onclick="window.selectBuildMode('Pranger')">Pranger <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Köpfe" onclick="window.selectBuildMode('Köpfe')">Aufgespießte Köpfe <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Scheiterhaufen" onclick="window.selectBuildMode('Scheiterhaufen')">Scheiterhaufen <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Verließ" onclick="window.selectBuildMode('Verließ')">Verließ <span class="cost-badge">20 Stein</span></button>
+            <button class="build-btn" id="btn-Streckbank" onclick="window.selectBuildMode('Streckbank')">Streckbank <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Käfig" onclick="window.selectBuildMode('Käfig')">Käfig <span class="cost-badge">5 Eisen</span></button>
+            <button class="build-btn" id="btn-Hackblock" onclick="window.selectBuildMode('Hackblock')">Hackblock <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Hexenstuhl" onclick="window.selectBuildMode('Hexenstuhl')">Hexenstuhl <span class="cost-badge">10 Holz</span></button>
+
+            <div class="category-title">Gärten & Freuden</div>
+            <button class="build-btn" id="btn-Maibaum" onclick="window.selectBuildMode('Maibaum')">Maibaum <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Tanzbär" onclick="window.selectBuildMode('Tanzbär')">Tanzbär <span class="cost-badge">15 Holz</span></button>
+            <button class="build-btn" id="btn-Gemeindegarten" onclick="window.selectBuildMode('Gemeindegarten')">Gemeindegarten <span class="cost-badge">15 Holz</span></button>
+            <button class="build-btn" id="btn-Stadtgarten" onclick="window.selectBuildMode('Stadtgarten')">Stadtgarten <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Statue" onclick="window.selectBuildMode('Statue')">Statue <span class="cost-badge">30 Stein</span></button>
+            <button class="build-btn" id="btn-Gebetsstelle" onclick="window.selectBuildMode('Gebetsstelle')">Gebetsstelle <span class="cost-badge">10 Stein</span></button>
+            <button class="build-btn" id="btn-KlTeich" onclick="window.selectBuildMode('KlTeich')">Kleiner Teich <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-GrTeich" onclick="window.selectBuildMode('GrTeich')">Großer Teich <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Flaggen" onclick="window.selectBuildMode('Flaggen')">Flaggen <span class="cost-badge">5 Holz</span></button>
+
+            <div class="category-title">Waffengebäude</div>
+            <button class="build-btn" id="btn-Pfeilmacherei" onclick="window.selectBuildMode('Pfeilmacherei')">Pfeilmacherei <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Pikenmacherei" onclick="window.selectBuildMode('Pikenmacherei')">Pikenmacherei <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Schmiede" onclick="window.selectBuildMode('Schmiede')">Schmiede <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Gerberei" onclick="window.selectBuildMode('Gerberei')">Gerberei <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Rüstungsschmiede" onclick="window.selectBuildMode('Rüstungsschmiede')">Rüstungsschmiede <span class="cost-badge">20 Holz</span></button>
+
+            <div class="category-title">Nahrungsgebäude</div>
+            <button class="build-btn" id="btn-Kornspeicher" onclick="window.selectBuildMode('Kornspeicher')">Kornspeicher <span class="cost-badge">5 Holz</span></button>
+            <button class="build-btn" id="btn-Mühle" onclick="window.selectBuildMode('Mühle')">Mühle <span class="cost-badge">20 Holz</span></button>
+            <button class="build-btn" id="btn-Bäckerei" onclick="window.selectBuildMode('Bäckerei')">Bäckerei <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Brauerei" onclick="window.selectBuildMode('Brauerei')">Brauerei <span class="cost-badge">10 Holz</span></button>
+            <button class="build-btn" id="btn-Schenke" onclick="window.selectBuildMode('Schenke')">Schenke <span class="cost-badge">20 Holz</span></button>
+
         </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>
     <script>
         // Simple bridge for UI to communicate with Phaser
-        window.currentBuildMode = 'wall';
+        window.currentBuildMode = 'unit';
 
         window.selectBuildMode = function(mode) {
             window.currentBuildMode = mode;
             document.querySelectorAll('.build-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + mode).classList.add('active');
+            let btn = document.getElementById('btn-' + mode);
+            if(btn) btn.classList.add('active');
         }
     </script>
 </body>
