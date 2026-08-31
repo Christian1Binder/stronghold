@@ -988,6 +988,13 @@
         </main>
     </div>
 
-    <script type="module" src="/src/main.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "phaser": "https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js"
+            }
+        }
+    </script>
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>
